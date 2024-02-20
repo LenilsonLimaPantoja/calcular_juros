@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import './Home.scss';
+import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
+
 import { v4 as uuidv4 } from 'uuid';
 const Home = () => {
     const [valores, setValores] = useState([]);
+    const [total, setTotal] = useState([{ valor_original: 0, valor_corrigido: 0 }]);
     const [taxaMensal, setTaxaMensal] = useState('');
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -28,6 +31,14 @@ const Home = () => {
         let valoresComJuros = calcularJuros(arrayValoresPorMes, taxaJurosMensal);
         console.log(valoresComJuros);
         setValores(valoresComJuros);
+        let totalvalores = { valor_original: 0, valor_corrigido: 0 };
+        valoresComJuros?.map((item) => {
+            if (!item.checkd && item.diferencaMeses > 0) {
+                totalvalores.valor_original = totalvalores.valor_original + item.valor_original;
+                totalvalores.valor_corrigido = totalvalores.valor_corrigido + item.valor_corrigido;
+            }
+        });
+        setTotal(totalvalores);
     }
 
 
@@ -58,6 +69,7 @@ const Home = () => {
                 valor_original: valor,
                 valor_corrigido: juros, // Calcula o valor total (valor + juros)
                 diferencaMeses: diferencaMeses,
+                checkd: diferencaMeses > 0 ? false : true,
                 id: uuidv4()
             };
         });
@@ -65,52 +77,74 @@ const Home = () => {
 
 
     const handleRemoce = (id) => {
-        let valoresRemover = valores.filter(item => item.id != id);
+        let valoresRemover = valores.filter((item) => {
+            if (item.id != id) {
+                return item;
+            }
+            if (item.id === id && item.checkd) {
+                item.checkd = false;
+                return item;
+            }
+            if (item.id === id && !item.checkd) {
+                item.checkd = true;
+                return item;
+            }
+        });
+
         setValores(valoresRemover);
+        let totalvalores = { valor_original: 0, valor_corrigido: 0 };
+        valoresRemover?.map((item) => {
+            if (!item.checkd && item.diferencaMeses > 0) {
+                totalvalores.valor_original = totalvalores.valor_original + item.valor_original;
+                totalvalores.valor_corrigido = totalvalores.valor_corrigido + item.valor_corrigido;
+            }
+        });
+        setTotal(totalvalores);
     }
 
 
     return (
         <div className='container'>
-            {valores.length < 1 &&
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        <span>Data inicial</span>
-                        <input type="date" name='data_ini' />
-                    </label>
-                    <label>
-                        <span>Valor Mensal</span>
-                        <input type="number" name='valor_mensal' />
-                    </label>
-                    <label>
-                        <span>Porcentagem (%) de juros</span>
-                        <input type="number" name='taxa_mensal' value={taxaMensal} onChange={(e) => setTaxaMensal(e.target.value)} />
-                    </label>
-                    <button className='btn-calucular'>CALCULAR</button>
-                    <button className='btn-limpar' type='reset'>LIMPAR</button>
-                </form>
-            }
+            <form onSubmit={handleSubmit}>
+                <label>
+                    <span>Data inicial</span>
+                    <input type="date" name='data_ini' />
+                </label>
+                <label>
+                    <span>Valor Mensal</span>
+                    <input type="number" name='valor_mensal' />
+                </label>
+                <label>
+                    <span>Porcentagem (%) de juros</span>
+                    <input type="number" name='taxa_mensal' value={taxaMensal} onChange={(e) => setTaxaMensal(e.target.value)} />
+                </label>
+                <button className='btn-calucular'>CALCULAR</button>
+                <button className='btn-limpar' type='reset'>LIMPAR</button>
+            </form>
+            <div>
+                <span>valor_corrigido: {total.valor_corrigido?.toFixed(2)}</span>
+                <br></br>
+                <span>valor_original: {total.valor_original?.toFixed(2)}</span>
+            </div>
             {valores.length > 0 &&
                 <table cellSpacing={0}>
-                    <thead>
-                        <tr>
-                            <th>DATA</th>
-                            <th>Valor</th>
-                            <th>Valor com correção ({taxaMensal}%)</th>
-                            <th>Meses em Atraso</th>
-                            <th>####</th>
-                        </tr>
-                    </thead>
                     <tbody>
                         {
                             valores?.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{`${item.mes}/${item.ano}`}</td>
-                                    <td>R$ {item.valor_original?.toFixed(2)}</td>
-                                    <td>R$ {item.valor_corrigido?.toFixed(2)}</td>
-                                    <td>{item.diferencaMeses}</td>
+                                    <td class="teste">
+                                        <span className='data'>{`${String(item.mes).padStart('2', 0)}/${item.ano}`}</span>
+                                        <span className='valores'>Meses em atraso: {item.diferencaMeses}</span>
+                                        <span className='valores'>Valor: R$ {item.valor_original?.toFixed(2)}</span>
+                                        <span className='valores'>Correção de {taxaMensal}% ao mês: R$ {item.valor_corrigido?.toFixed(2)}</span>
+                                        <button className={`btn-${item.diferencaMeses === 0 || item.checkd ? 'green' : 'red'}`}>{item.diferencaMeses === 0 || item.checkd ? item.diferencaMeses === 0 ? 'aberto' : 'pago' : 'atrasado'}</button>
+                                    </td>
                                     <td>
-                                        <button title='Remover' onClick={() => handleRemoce(item.id)}>remover</button>
+                                        {item.checkd ?
+                                            <GrCheckboxSelected onClick={() => handleRemoce(item.id)} />
+                                            :
+                                            <GrCheckbox onClick={() => handleRemoce(item.id)} />
+                                        }
                                     </td>
                                 </tr>
                             ))

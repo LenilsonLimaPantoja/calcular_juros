@@ -5,102 +5,67 @@
 }
 
 .container {
+    height: 100vh;
+    width: 100vw;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    min-height: 100vh;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     padding: 20px;
-
-    @media (max-width: 700px) {
-        padding: 10px;
-    }
-    form {
-        background-color: #f8f3fe;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        max-width: 700px;
-        row-gap: 20px;
-        padding: 40px;
-        border-radius: 10px;
-
-        label {
-            background-color: #fff;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            border-radius: 10px;
-            border: solid 1px rgb(228, 223, 223);
-
-            input {
-                padding: 5px;
-                outline: none;
-                border: none;
-            }
-        }
-
-        .btn-calucular,
-        .btn-limpar {
-            height: 60px;
-            border-radius: 10px;
-            border: none;
-            background-color: rgba(97, 21, 221, 1);
-            color: #fff;
-            cursor: pointer;
-            transition: .5s;
-            text-transform: uppercase;
-            font-weight: 700;
-
-            &:hover {
-                opacity: 0.8;
-            }
-        }
-
-        .btn-limpar {
-            background-color: #fff;
-            color: rgba(97, 21, 221, 1);
-            border: solid 1px rgba(97, 21, 221, 1);
-        }
-        @media (max-width: 700px) {
-            padding: 20px;
-        }
-    }
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: gray;
 
     table {
+        overflow: auto;
+        background-color: #FBFBFB;
         width: 100%;
-        // max-width: 1000px;
-
-        thead {
-            background-color: rgba(97, 21, 221, 1);
-            color: #fff;
-            text-transform: uppercase;
-
-            tr {
-                th {
-                    padding: 20px;
-                }
-            }
-        }
+        max-width: 1350px;
+        border: solid 1px rgb(187, 186, 186);
+        border-bottom: none;
 
         tbody {
             tr {
-                &:nth-child(even) {
-                    background-color: #f8f3fe;
-                }
 
                 td {
-                    text-align: center;
-                    padding: 20px;
+                    text-align: left;
+                    border-bottom: solid 1px rgb(187, 186, 186);
+                    padding: 10px 20px;
+
+                    svg {
+                        font-size: 25px;
+                        cursor: pointer;
+                    }
 
                     button {
-                        border: solid 1px rgba(97, 21, 221, 1);
-                        padding: 10px;
-                        color: rgba(97, 21, 221, 1);
-                        cursor: pointer;
-                        min-width: 100px;
+                        padding: 5px;
+                        color: #fff;
+                        border: none;
+                        max-width: 200px;
+                    }
+
+                    .btn-red {
+                        background-color: red;
+                    }
+
+                    .btn-green {
+                        background-color: green;
                     }
                 }
+
+                .teste {
+                    display: flex;
+                    flex-direction: column;
+                    row-gap: 5px;
+
+                    .data {
+                        font-weight: 700;
+                        color: #000;
+                    }
+
+                    .valores {
+                        font-size: 14px;
+                    }
+                }
+
             }
         }
     }
