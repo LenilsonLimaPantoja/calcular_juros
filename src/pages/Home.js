@@ -112,11 +112,11 @@ const Home = () => {
                 </label>
                 <label>
                     <span>Valor Mensal</span>
-                    <input type="number" name='valor_mensal' />
+                    <input type="tel" name='valor_mensal' />
                 </label>
                 <label>
                     <span>Porcentagem (%) de juros</span>
-                    <input type="number" name='taxa_mensal' value={taxaMensal} onChange={(e) => setTaxaMensal(e.target.value)} />
+                    <input type="tel" name='taxa_mensal' value={taxaMensal} onChange={(e) => setTaxaMensal(e.target.value)} />
                 </label>
                 <button className='btn-calucular'>CALCULAR</button>
                 <button className='btn-limpar' type='reset'>LIMPAR</button>
