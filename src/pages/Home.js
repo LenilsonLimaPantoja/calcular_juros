@@ -131,7 +131,7 @@ const Home = () => {
                         <tbody>
                             {
                                 valores?.map((item, index) => (
-                                    <tr key={index}>
+                                    <tr key={index} onClick={() => handleRemoce(item.id)}>
                                         <td class="teste">
                                             <span className='data'>{`${String(item.mes).padStart('2', 0)}/${item.ano}`}</span>
                                             <span className='valores'>Meses em atraso: {item.diferencaMeses}</span>
