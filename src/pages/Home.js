@@ -13,7 +13,6 @@ const Home = () => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const formValues = Object.fromEntries(formData);
-        console.log(formValues);
 
 
         // var inputProcentagem = document.getElementById('procentagem').value;
@@ -27,11 +26,9 @@ const Home = () => {
             arrayValoresPorMes.push({ mes: dataTemp.getMonth() + 1, ano: dataTemp.getFullYear(), valor: formValues.valor_mensal });
             dataTemp.setMonth(dataTemp.getMonth() + 1); // Incrementa a data em 1 mês
         }
-        console.log(arrayValoresPorMes);
         const taxaJurosMensal = `0.0${formValues.taxa_mensal}`; // 5% ao mês
 
         let valoresComJuros = calcularJuros(arrayValoresPorMes, taxaJurosMensal);
-        console.log(valoresComJuros);
         setValores(valoresComJuros);
         let totalvalores = { valor_original: 0, valor_corrigido: 0 };
         valoresComJuros?.map((item) => {
@@ -107,7 +104,9 @@ const Home = () => {
 
     const handleGerarPDF = async (e) => {
         e.preventDefault();
-        localStorage.setItem('@pdf_juros', JSON.stringify(valores))
+        let copiaValores = valores.filter(item => item.checkd === false);
+
+        localStorage.setItem('@pdf_juros', JSON.stringify(copiaValores))
         localStorage.setItem('@pdf_juros_totais', JSON.stringify(total))
         redirect('/home-pdf')
     }
