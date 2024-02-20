@@ -3,7 +3,9 @@ import './Home.scss';
 import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
 
 import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 const Home = () => {
+    const redirect = useNavigate();
     const [valores, setValores] = useState([]);
     const [total, setTotal] = useState([{ valor_original: 0, valor_corrigido: 0 }]);
     const [taxaMensal, setTaxaMensal] = useState('');
@@ -103,6 +105,12 @@ const Home = () => {
     }
 
 
+    const handleGerarPDF = async (e) => {
+        e.preventDefault();
+        localStorage.setItem('@pdf_juros', JSON.stringify(valores))
+        localStorage.setItem('@pdf_juros_totais', JSON.stringify(total))
+        redirect('/home-pdf')
+    }
     return (
         <div className='container'>
             <form onSubmit={handleSubmit}>
@@ -123,6 +131,9 @@ const Home = () => {
             </form>
             {valores.length > 0 &&
                 <>
+                    <form onSubmit={handleGerarPDF}>
+                        <button className='btn-calucular'>GERAR PDF</button>
+                    </form>
                     <div className='valores-totais'>
                         <span>Valor Original a Receber: R$ {total.valor_original?.toFixed(2)}</span>
                         <span>Valor Corrigido a Receber: R$ {total.valor_corrigido?.toFixed(2)}</span>
