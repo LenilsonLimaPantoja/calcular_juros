@@ -134,7 +134,7 @@ const Home = () => {
                                     <td class="teste">
                                         <span className='data'>{`${String(item.mes).padStart('2', 0)}/${item.ano}`}</span>
                                         <span className='valores'>Meses em atraso: {item.diferencaMeses}</span>
-                                        <span className='valores'>Valor: R$ {item.valor_original?.toFixed(2)}</span>
+                                        <span className='valores'>Valor original: R$ {item.valor_original?.toFixed(2)}</span>
                                         <span className='valores'>Correção de {taxaMensal}% ao mês: R$ {item.valor_corrigido?.toFixed(2)}</span>
                                         <button className={`btn-${item.diferencaMeses === 0 || item.checkd ? 'green' : 'red'}`}>{item.diferencaMeses === 0 || item.checkd ? item.diferencaMeses === 0 ? 'aberto' : 'pago' : 'atrasado'}</button>
                                     </td>
