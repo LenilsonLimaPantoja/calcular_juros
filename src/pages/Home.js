@@ -121,10 +121,9 @@ const Home = () => {
                 <button className='btn-calucular'>CALCULAR</button>
                 <button className='btn-limpar' type='reset'>LIMPAR</button>
             </form>
-            <div>
-                <span>valor_corrigido: {total.valor_corrigido?.toFixed(2)}</span>
-                <br></br>
-                <span>valor_original: {total.valor_original?.toFixed(2)}</span>
+            <div className='valores-totais'>
+                <span>Valor Original: R$ {total.valor_original?.toFixed(2)}</span>
+                <span>Valor Corrigido: R$ {total.valor_corrigido?.toFixed(2)}</span>
             </div>
             {valores.length > 0 &&
                 <table cellSpacing={0}>
