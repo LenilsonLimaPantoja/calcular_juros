@@ -121,35 +121,37 @@ const Home = () => {
                 <button className='btn-calucular'>CALCULAR</button>
                 <button className='btn-limpar' type='reset'>LIMPAR</button>
             </form>
-            <div className='valores-totais'>
-                <span>Valor Original: R$ {total.valor_original?.toFixed(2)}</span>
-                <span>Valor Corrigido: R$ {total.valor_corrigido?.toFixed(2)}</span>
-            </div>
             {valores.length > 0 &&
-                <table cellSpacing={0}>
-                    <tbody>
-                        {
-                            valores?.map((item, index) => (
-                                <tr key={index}>
-                                    <td class="teste">
-                                        <span className='data'>{`${String(item.mes).padStart('2', 0)}/${item.ano}`}</span>
-                                        <span className='valores'>Meses em atraso: {item.diferencaMeses}</span>
-                                        <span className='valores'>Valor original: R$ {item.valor_original?.toFixed(2)}</span>
-                                        <span className='valores'>Correção de {taxaMensal}% ao mês: R$ {item.valor_corrigido?.toFixed(2)}</span>
-                                        <button className={`btn-${item.diferencaMeses === 0 || item.checkd ? 'green' : 'red'}`}>{item.diferencaMeses === 0 || item.checkd ? item.diferencaMeses === 0 ? 'aberto' : 'pago' : 'atrasado'}</button>
-                                    </td>
-                                    <td>
-                                        {item.checkd ?
-                                            <GrCheckboxSelected onClick={() => handleRemoce(item.id)} />
-                                            :
-                                            <GrCheckbox onClick={() => handleRemoce(item.id)} />
-                                        }
-                                    </td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
+                <>
+                    <div className='valores-totais'>
+                        <span>Valor Original a Receber: R$ {total.valor_original?.toFixed(2)}</span>
+                        <span>Valor Corrigido a Receber: R$ {total.valor_corrigido?.toFixed(2)}</span>
+                    </div>
+                    <table cellSpacing={0}>
+                        <tbody>
+                            {
+                                valores?.map((item, index) => (
+                                    <tr key={index}>
+                                        <td class="teste">
+                                            <span className='data'>{`${String(item.mes).padStart('2', 0)}/${item.ano}`}</span>
+                                            <span className='valores'>Meses em atraso: {item.diferencaMeses}</span>
+                                            <span className='valores'>Valor original: R$ {item.valor_original?.toFixed(2)}</span>
+                                            <span className='valores'>Correção de {taxaMensal}% ao mês: R$ {item.valor_corrigido?.toFixed(2)}</span>
+                                            <button className={`btn-${item.diferencaMeses === 0 || item.checkd ? 'green' : 'red'}`}>{item.diferencaMeses === 0 || item.checkd ? item.diferencaMeses === 0 ? 'aberto' : 'pago' : 'atrasado'}</button>
+                                        </td>
+                                        <td>
+                                            {item.checkd ?
+                                                <GrCheckboxSelected onClick={() => handleRemoce(item.id)} />
+                                                :
+                                                <GrCheckbox onClick={() => handleRemoce(item.id)} />
+                                            }
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </>
             }
         </div>
     )
