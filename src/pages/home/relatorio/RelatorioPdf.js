@@ -1,21 +1,11 @@
 import { Document, Page, Text, StyleSheet, View, } from "@react-pdf/renderer";
 import { PDFViewer } from "@react-pdf/renderer";
-import React, { useEffect, useState } from "react";
 
-function HomePdf() {
-    const [valores, setValores] = useState([]);
-    const [valoresTotais, setValoresTotais] = useState([]);
+function RelatorioPdf({valores, valoresTotais}) {
     const data = new Date();
     const dia = String(data.getDate()).padStart(2, "0");
     const mes = String(data.getMonth() + 1).padStart(2, "0");
     const ano = data.getFullYear();
-
-    useEffect(() => {
-        const dados = localStorage.getItem('@pdf_juros');
-        const totais = localStorage.getItem('@pdf_juros_totais');
-        setValores(JSON.parse(dados));
-        setValoresTotais(JSON.parse(totais));
-    }, []);
 
     return (
         <PDFViewer style={{ width: "100%", maxHeight: "100vh", minHeight: "100vh" }}>
@@ -82,7 +72,7 @@ function HomePdf() {
     );
 }
 
-export default HomePdf;
+export default RelatorioPdf;
 
 const styles = StyleSheet.create({
     body: {

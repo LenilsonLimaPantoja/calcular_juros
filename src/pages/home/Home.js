@@ -1,15 +1,13 @@
 import { useState } from 'react';
 import './Home.scss';
 import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
-
 import { v4 as uuidv4 } from 'uuid';
-import { useNavigate } from 'react-router-dom';
-import HomePdf from './HomePdf';
+import RelatorioPdf from './relatorio/RelatorioPdf';
 const Home = () => {
-    const redirect = useNavigate();
     const [valores, setValores] = useState([]);
     const [total, setTotal] = useState([{ valor_original: 0, valor_corrigido: 0 }]);
     const [taxaMensal, setTaxaMensal] = useState('');
+    const [relatorioOnClose, setRelatorioOnClose] = useState(false);
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -105,66 +103,68 @@ const Home = () => {
 
     const handleGerarPDF = async (e) => {
         e.preventDefault();
-        let copiaValores = valores.filter(item => item.checkd === false);
-
-        localStorage.setItem('@pdf_juros', JSON.stringify(copiaValores))
-        localStorage.setItem('@pdf_juros_totais', JSON.stringify(total))
-        redirect('/home-pdf')
+        setRelatorioOnClose(!relatorioOnClose);
     }
     return (
-        <div className='container'>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    <span>Data inicial</span>
-                    <input type="date" name='data_ini' />
-                </label>
-                <label>
-                    <span>Valor Mensal</span>
-                    <input type="tel" name='valor_mensal' />
-                </label>
-                <label>
-                    <span>Porcentagem (%) de juros</span>
-                    <input type="tel" name='taxa_mensal' value={taxaMensal} onChange={(e) => setTaxaMensal(e.target.value)} />
-                </label>
-                <button className='btn-calucular'>CALCULAR</button>
-                <button className='btn-limpar' type='reset'>LIMPAR</button>
-            </form>
-            {valores.length > 0 &&
-                <>
-                    <form onSubmit={handleGerarPDF}>
-                        <button className='btn-calucular'>GERAR PDF</button>
+        <>
+            {valores.length < 1 || !relatorioOnClose ?
+                <div className='container'>
+                    <form onSubmit={handleSubmit}>
+                        <label>
+                            <span>Data inicial</span>
+                            <input type="date" name='data_ini' />
+                        </label>
+                        <label>
+                            <span>Valor Mensal</span>
+                            <input type="tel" name='valor_mensal' />
+                        </label>
+                        <label>
+                            <span>Porcentagem (%) de juros</span>
+                            <input type="tel" name='taxa_mensal' value={taxaMensal} onChange={(e) => setTaxaMensal(e.target.value)} />
+                        </label>
+                        <button className='btn-calucular'>CALCULAR</button>
+                        <button className='btn-limpar' type='reset'>LIMPAR</button>
                     </form>
-                    <div className='valores-totais'>
-                        <span>Valor Original a Receber: R$ {total.valor_original?.toFixed(2)}</span>
-                        <span>Valor Corrigido a Receber: R$ {total.valor_corrigido?.toFixed(2)}</span>
-                    </div>
-                    <table cellSpacing={0}>
-                        <tbody>
-                            {
-                                valores?.map((item, index) => (
-                                    <tr key={index}>
-                                        <td class="teste">
-                                            <span className='data'>{`${String(item.mes).padStart('2', 0)}/${item.ano}`}</span>
-                                            <span className='valores'>Meses em atraso: {item.diferencaMeses}</span>
-                                            <span className='valores'>Valor original: R$ {item.valor_original?.toFixed(2)}</span>
-                                            <span className='valores'>Correção de {taxaMensal}% ao mês: R$ {item.valor_corrigido?.toFixed(2)}</span>
-                                            <button className={`btn-${item.diferencaMeses === 0 || item.checkd ? 'green' : 'red'}`}>{item.diferencaMeses === 0 || item.checkd ? item.diferencaMeses === 0 ? 'aberto' : 'pago' : 'atrasado'}</button>
-                                        </td>
-                                        <td>
-                                            {item.checkd ?
-                                                <GrCheckboxSelected onClick={() => handleRemoce(item.id)} />
-                                                :
-                                                <GrCheckbox onClick={() => handleRemoce(item.id)} />
-                                            }
-                                        </td>
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
-                    </table>
-                </>
+                    {valores.length > 0 &&
+                        <>
+                            <form onSubmit={handleGerarPDF}>
+                                <button className='btn-calucular'>GERAR PDF</button>
+                            </form>
+                            <div className='valores-totais'>
+                                <span>Valor Original a Receber: R$ {total.valor_original?.toFixed(2)}</span>
+                                <span>Valor Corrigido a Receber: R$ {total.valor_corrigido?.toFixed(2)}</span>
+                            </div>
+                            <table cellSpacing={0}>
+                                <tbody>
+                                    {
+                                        valores?.map((item, index) => (
+                                            <tr key={index}>
+                                                <td class="teste">
+                                                    <span className='data'>{`${String(item.mes).padStart('2', 0)}/${item.ano}`}</span>
+                                                    <span className='valores'>Meses em atraso: {item.diferencaMeses}</span>
+                                                    <span className='valores'>Valor original: R$ {item.valor_original?.toFixed(2)}</span>
+                                                    <span className='valores'>Correção de {taxaMensal}% ao mês: R$ {item.valor_corrigido?.toFixed(2)}</span>
+                                                    <button className={`btn-${item.diferencaMeses === 0 || item.checkd ? 'green' : 'red'}`}>{item.diferencaMeses === 0 || item.checkd ? item.diferencaMeses === 0 ? 'aberto' : 'pago' : 'atrasado'}</button>
+                                                </td>
+                                                <td>
+                                                    {item.checkd ?
+                                                        <GrCheckboxSelected onClick={() => handleRemoce(item.id)} />
+                                                        :
+                                                        <GrCheckbox onClick={() => handleRemoce(item.id)} />
+                                                    }
+                                                </td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                        </>
+                    }
+                </div>
+                :
+                <RelatorioPdf valores={valores.filter(item => item.checkd === false)} valoresTotais={total} />
             }
-        </div>
+        </>
     )
 }
 export default Home;
