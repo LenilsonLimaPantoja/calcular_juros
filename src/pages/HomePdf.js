@@ -63,13 +63,13 @@ function HomePdf() {
                             </View>
                         </View>
                         <View style={[styles.containerRow, { justifyContent: "space-between", marginTop: 50 }]}>
-                            <View style={{ border: "dashed", borderTopWidth: 1, width: "45%" }}>
+                            <View style={{ border: "dashed", borderTopWidth: 1, width: "40%" }}>
                                 <Text style={[styles.text, { textAlign: "center" }]}>
                                     Lenilson Lima Pantoja
                                 </Text>
                             </View>
 
-                            <View style={{ border: "dashed", borderTopWidth: 1, width: "45%" }}>
+                            <View style={{ border: "dashed", borderTopWidth: 1, width: "40%" }}>
                                 <Text style={[styles.text, { textAlign: "center" }]}>
                                     Campo Grande MS, {dia}/{mes}/{ano}.
                                 </Text>

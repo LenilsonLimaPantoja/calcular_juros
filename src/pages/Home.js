@@ -4,6 +4,7 @@ import { GrCheckbox, GrCheckboxSelected } from "react-icons/gr";
 
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
+import HomePdf from './HomePdf';
 const Home = () => {
     const redirect = useNavigate();
     const [valores, setValores] = useState([]);
